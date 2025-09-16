@@ -1,0 +1,129 @@
+.version-box {
+  margin-top: 12px;
+  font-size: 1.1em;
+}
+.version-badge {
+  display: inline-block;
+  background: #3b4cca;
+  color: #fff;
+  border-radius: 8px;
+  padding: 4px 10px;
+  margin: 2px 4px 2px 0;
+  font-size: 0.95em;
+  font-weight: 500;
+}
+.stats-box {
+  margin-top: 18px;
+  background: #f7f7fc;
+  border-radius: 12px;
+  padding: 12px;
+}
+.stats-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.stat-label {
+  width: 120px;
+  font-weight: 500;
+  color: #888;
+}
+.stat-bar {
+  display: inline-block;
+  background: #78C850;
+  color: #fff;
+  border-radius: 8px;
+  padding: 2px 10px;
+  min-width: 40px;
+  font-size: 0.95em;
+  font-weight: 500;
+}
+.ability-badge {
+  display: inline-block;
+  background: #e3e3e3;
+  color: #333;
+  border-radius: 8px;
+  padding: 4px 10px;
+  margin: 2px 4px 2px 0;
+  font-size: 0.95em;
+  font-weight: 500;
+}
+.weakness-box {
+  margin-top: 16px;
+  font-size: 1.1em;
+}
+.weakness-list {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.pokemon-detail {
+  max-width: 900px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  padding: 32px 24px;
+}
+.detail-main {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+}
+.detail-img {
+  width: 220px;
+  height: 220px;
+  object-fit: contain;
+  background: #f7f7fc;
+  border-radius: 16px;
+  margin-bottom: 12px;
+}
+.detail-info {
+  flex: 1;
+  text-align: left;
+}
+.detail-box {
+  background: #e3f1ff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 12px;
+  font-size: 1.1em;
+}
+.type-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  margin: 2px;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.95em;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+.evolutions {
+  margin-top: 32px;
+}
+.evo-list {
+  display: flex;
+  gap: 24px;
+}
+.evo-card {
+  background: #f7f7fc;
+  border-radius: 12px;
+  padding: 16px 24px;
+  font-size: 1.1em;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+}
+.back-link {
+  display: inline-block;
+  margin-bottom: 18px;
+  color: #e3350d;
+  font-weight: bold;
+  text-decoration: none;
+}
