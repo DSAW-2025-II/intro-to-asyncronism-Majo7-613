@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import PokemonDetail from './PokemonDetail';
 import './App.css';
 
-function Home({ pokemons, search, setSearch, filtered, loading, sortMenuOpen, setSortMenuOpen, sortType, setSortType, page, setPage, totalPages }) {
+function Home({ pokemons, search, setSearch, filtered, loading, sortMenuOpen, setSortMenuOpen, sortType, setSortType, page, setPage, totalPages, setTypeFilter, typeFilter }) {
   return (
     <div className="App">
       <h1>Pokédex (PokéAPI)</h1>
@@ -35,6 +35,13 @@ function Home({ pokemons, search, setSearch, filtered, loading, sortMenuOpen, se
         onChange={e => setSearch(e.target.value)}
         style={{marginBottom: '20px', padding: '8px', fontSize: '16px'}}
       />
+      {typeFilter && (
+        <div style={{marginBottom: '12px'}}>
+          <span>Filtrando por tipo: </span>
+          <span className={`type-badge type-${typeFilter}`}>{typeFilter}</span>
+          <button style={{marginLeft: '8px'}} onClick={() => setTypeFilter('')}>Quitar filtro</button>
+        </div>
+      )}
       {loading ? (
         <p>Cargando pokémon...</p>
       ) : (
@@ -48,7 +55,7 @@ function Home({ pokemons, search, setSearch, filtered, loading, sortMenuOpen, se
                   <h2>{poke.name}</h2>
                   <div className="type-list">
                     {poke.types.map((type, i) => (
-                      <span key={i} className={`type-badge type-${type}`}>{type}</span>
+                      <span key={i} className={`type-badge type-${type}`} onClick={e => {e.preventDefault(); setTypeFilter(type);}} style={{cursor: 'pointer'}}>{type}</span>
                     ))}
                   </div>
                   <p className="poke-weight">Peso: {poke.weight}</p>
@@ -77,19 +84,63 @@ function App() {
   const [page, setPage] = useState(1);
   const pageSize = 50;
   const [totalPages, setTotalPages] = useState(1);
+  const [typeFilter, setTypeFilter] = useState('');
 
   useEffect(() => {
     async function fetchAllPokemons() {
       setLoading(true);
-      const res = await fetch('https://pokeapi.co/api/v2/pokemon?limit=1025');
+      // Solo obtenemos la lista de nombres y urls
+      const res = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=1025`);
       const data = await res.json();
+      setPokemons(data.results.map((poke, idx) => ({
+        dex: idx + 1,
+        name: poke.name,
+        url: poke.url
+      })));
+      setLoading(false);
+    }
+    fetchAllPokemons();
+  }, []);
+
+  useEffect(() => {
+    async function fetchPageDetails() {
+      setLoading(true);
+      let result = pokemons.filter(p => p.name.toLowerCase().includes(search.toLowerCase()));
+      switch (sortType) {
+        case 'num-asc':
+          result = result.sort((a, b) => a.dex - b.dex);
+          break;
+        case 'num-desc':
+          result = result.sort((a, b) => b.dex - a.dex);
+          break;
+        case 'az':
+          result = result.sort((a, b) => a.name.localeCompare(b.name));
+          break;
+        case 'za':
+          result = result.sort((a, b) => b.name.localeCompare(a.name));
+          break;
+        default:
+          break;
+      }
+      setTotalPages(Math.ceil(result.length / pageSize));
+      // Si hay filtro de tipo, buscar solo los pokémon de ese tipo
+      let pagePokemons = result.slice((page - 1) * pageSize, page * pageSize);
+      if (typeFilter) {
+        // Buscar solo los pokémon de ese tipo en la API
+        const resType = await fetch(`https://pokeapi.co/api/v2/type/${typeFilter}`);
+        const typeData = await resType.json();
+        // typeData.pokemon es un array con los pokémon de ese tipo
+        const typeNames = typeData.pokemon.map(p => p.pokemon.name);
+        pagePokemons = pagePokemons.filter(p => typeNames.includes(p.name));
+      }
+      // Pedimos los detalles SOLO de estos
       const details = await Promise.all(
-        data.results.map(async (poke, idx) => {
+        pagePokemons.map(async (poke) => {
           const resDetails = await fetch(poke.url);
           const detailsData = await resDetails.json();
           const types = detailsData.types.map(t => t.type.name);
           return {
-            dex: idx + 1,
+            dex: poke.dex,
             name: detailsData.name,
             types,
             image: detailsData.sprites.front_default,
@@ -97,33 +148,13 @@ function App() {
           };
         })
       );
-      setPokemons(details);
+      setFiltered(details);
       setLoading(false);
     }
-    fetchAllPokemons();
-  }, []);
-
-  useEffect(() => {
-    let result = pokemons.filter(p => p.name.toLowerCase().includes(search.toLowerCase()));
-    switch (sortType) {
-      case 'num-asc':
-        result = result.sort((a, b) => a.dex - b.dex);
-        break;
-      case 'num-desc':
-        result = result.sort((a, b) => b.dex - a.dex);
-        break;
-      case 'az':
-        result = result.sort((a, b) => a.name.localeCompare(b.name));
-        break;
-      case 'za':
-        result = result.sort((a, b) => b.name.localeCompare(a.name));
-        break;
-      default:
-        break;
+    if (pokemons.length > 0) {
+      fetchPageDetails();
     }
-    setTotalPages(Math.ceil(result.length / pageSize));
-    setFiltered(result.slice((page - 1) * pageSize, page * pageSize));
-  }, [search, pokemons, sortType, page]);
+  }, [search, pokemons, sortType, page, typeFilter]);
 
   return (
     <Router>
@@ -142,6 +173,8 @@ function App() {
             page={page}
             setPage={setPage}
             totalPages={totalPages}
+            setTypeFilter={setTypeFilter}
+            typeFilter={typeFilter}
           />
         } />
         <Route path="/pokemon/:name" element={<PokemonDetail />} />

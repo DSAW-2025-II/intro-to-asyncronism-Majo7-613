@@ -71,7 +71,43 @@ function PokemonDetail() {
   const gender = species.gender_rate === -1 ? 'Desconocido' : species.gender_rate === 0 ? '♂' : species.gender_rate === 8 ? '♀' : '♂/♀';
   // Categoría
   const category = species.genera.find(g => g.language.name === 'es')?.genus || species.genera[0]?.genus || '';
-  // Versión
+  // Versión amigable en español
+  const versionNamesES = {
+    'red': 'Rojo',
+    'blue': 'Azul',
+    'yellow': 'Amarillo',
+    'gold': 'Oro',
+    'silver': 'Plata',
+    'crystal': 'Cristal',
+    'ruby': 'Rubí',
+    'sapphire': 'Zafiro',
+    'emerald': 'Esmeralda',
+    'firered': 'Rojo Fuego',
+    'leafgreen': 'Verde Hoja',
+    'diamond': 'Diamante',
+    'pearl': 'Perla',
+    'platinum': 'Platino',
+    'heartgold': 'Oro HeartGold',
+    'soulsilver': 'Plata SoulSilver',
+    'black': 'Negro',
+    'white': 'Blanco',
+    'black-2': 'Negro 2',
+    'white-2': 'Blanco 2',
+    'x': 'X',
+    'y': 'Y',
+    'omega-ruby': 'Rubí Omega',
+    'alpha-sapphire': 'Zafiro Alfa',
+    'sun': 'Sol',
+    'moon': 'Luna',
+    'ultra-sun': 'Ultrasol',
+    'ultra-moon': 'Ultraluna',
+    'lets-go-pikachu': 'Let’s Go Pikachu',
+    'lets-go-eevee': 'Let’s Go Eevee',
+    'sword': 'Espada',
+    'shield': 'Escudo',
+    'scarlet': 'Escarlata',
+    'violet': 'Púrpura',
+  };
   const versions = data.game_indices.map(g => g.version.name).slice(0, 2);
   // Puntos base
   const stats = data.stats;
@@ -102,7 +138,7 @@ function PokemonDetail() {
           </div>
           <div className="version-box">
             <strong>Versiones:</strong> {versions.map((v, i) => (
-              <span key={i} className="version-badge" onClick={() => window.open(`https://pokeapi.co/api/v2/version/${v}`, '_blank')}>{v}</span>
+              <span key={i} className="version-badge">{versionNamesES[v] || v}</span>
             ))}
           </div>
           <div className="stats-box">

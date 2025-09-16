@@ -31,12 +31,16 @@
   color: #888;
 }
 .filter-label {
-  font-weight: 500;
-  letter-spacing: 1px;
+  font-weight: 700;
+  color: #222;
+  background: rgb(255, 255, 255);
+  padding: 4px 12px;
+  border-radius: 8px;
 }
 .sort-menu-container {
   position: relative;
   display: inline-block;
+  z-index: 1001;
 }
 .sort-menu-btn {
   background: #222;
@@ -63,7 +67,7 @@
   border-radius: 0 0 10px 10px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.12);
   min-width: 200px;
-  z-index: 10;
+  z-index: 999999999; /* Aumenta este valor */
   padding: 8px 0;
 }
 .sort-menu-item {
@@ -88,9 +92,8 @@
   position: relative;
 }
 
-body {
-  background: repeating-linear-gradient(135deg, #e3350d 0px, #e3350d 2px, transparent 2px, transparent 40px),
-    linear-gradient(135deg, #f7f7fc 60%, #ffe066 100%);
+body, .App {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c9e7ff 100%);
   min-height: 100vh;
 }
 
@@ -103,18 +106,18 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-image: url('https://files.catbox.moe/your-image-url.png'); /* Reemplaza con la URL real de la imagen adjunta */
+  background-image: url('/WallPokedex.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  opacity: 0.18;
+  opacity: 0.40;
   z-index: 0;
   pointer-events: none;
 }
 
 .App > * {
   position: relative;
-  z-index: 1;
+  /* z-index: 1; */
 }
 
 
@@ -125,22 +128,26 @@ body {
   margin: 0 auto;
   width: 90%;
   padding-bottom: 40px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 20px;
+  padding: 24px 0;
 }
 
 .pokemon-card {
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  background: rgba(255,255,255,0.85);
+  border-radius: 18px;
+  box-shadow: 0 4px 16px 0 rgba(30, 144, 255, 0.10), 0 1.5px 6px 0 rgba(0,0,0,0.07);
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1.5px solid #e0e7ef;
   padding: 18px 12px 12px 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  transition: transform 0.2s;
   position: relative;
 }
 .pokemon-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 8px 24px 0 rgba(30, 144, 255, 0.18), 0 3px 12px 0 rgba(0,0,0,0.10);
 }
 .poke-img {
   width: 96px;
